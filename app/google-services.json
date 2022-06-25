@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "136281490940",
+    "project_id": "zensarnewsapp",
+    "storage_bucket": "zensarnewsapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136281490940:android:5fc83bab4b6ae322dede79",
+        "android_client_info": {
+          "package_name": "com.amrit.zensarnewsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136281490940-5tqivn1bhlgnmf0mh7nv3gma0coeiurr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBh4gi8NEu7pmJGUPY5JEcKMXFtOvA-FY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "136281490940-5tqivn1bhlgnmf0mh7nv3gma0coeiurr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -14,6 +14,10 @@ import com.amrit.zensarnewsapp.R
 import com.amrit.zensarnewsapp.databinding.FragmentNewsDetailsBinding
 import com.amrit.zensarnewsapp.modal.Articles
 import com.amrit.zensarnewsapp.viewmodal.NewsViewModal
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 class NewsDetailsFragment : Fragment() {
@@ -38,7 +42,7 @@ class NewsDetailsFragment : Fragment() {
                 initViewWithData(article, inflate.root)
             }
         })
-
+        logNewsDetailsScreenViewEvent()
         return inflate.root
     }
 
@@ -50,5 +54,12 @@ class NewsDetailsFragment : Fragment() {
             Picasso.with(requireActivity()).load(article.urlToImage)
                 .placeholder(android.R.drawable.presence_offline)
                 .into(view.findViewById<ImageView>(R.id.articleImage))
+    }
+
+    private fun logNewsDetailsScreenViewEvent() {
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, getString(R.string.fb_details_screen_name))
+            param(FirebaseAnalytics.Param.SCREEN_CLASS, "NewsDetailsFragment")
+        }
     }
 }

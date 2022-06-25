@@ -20,6 +20,10 @@ import com.amrit.zensarnewsapp.utils.SharedPrefHelper
 import com.amrit.zensarnewsapp.view.NewsListAdapter
 import com.amrit.zensarnewsapp.view.OnNewsRowClick
 import com.amrit.zensarnewsapp.viewmodal.NewsViewModal
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 
 class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -80,6 +84,7 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
         swipeRefreshLayout.setOnRefreshListener(this@NewsListFragment)
         recyclerView.layoutManager = layoutManager
         recyclerView.setHasFixedSize(true)
+        logNewsListScreenViewEvent()
         return Pair(recyclerView, progressBar)
     }
 
@@ -97,6 +102,7 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
     override fun onNewsArticleClick(article: Articles) {
         viewModel.showNewsDetailsFragment.postValue(true)
         viewModel.articles.postValue(article)
+        logArticleClickEvent(article.title ?: getString(R.string.unknown))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -140,5 +146,18 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
     override fun onRefresh() {
         getData()
         swipeRefreshLayout.isRefreshing = false
+    }
+
+    private fun logArticleClickEvent(newsTitle: String) {
+        Firebase.analytics.logEvent(getString(R.string.fb_article_click_event)) {
+            param(getString(R.string.fb_article_title), newsTitle)
+        }
+    }
+
+    private fun logNewsListScreenViewEvent() {
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, getString(R.string.fb_list_screen_name))
+            param(FirebaseAnalytics.Param.SCREEN_CLASS, "NewsArticleFragment")
+        }
     }
 }

@@ -7,4 +7,8 @@
     <string name="published">Published</string>
     <string name="link">More Info</string>
     <string name="unknown">UNKNOWN</string>
+    <string name="fb_list_screen_name">News Article List</string>
+    <string name="fb_details_screen_name">News Details View</string>
+    <string name="fb_article_click_event">article_click</string>
+    <string name="fb_article_title">article_title</string>
 </resources>
