@@ -12,4 +12,7 @@ object NetworkAPIConstants {
 
     // required to send in get request if user selects "CANADA" country
     const val COUNTRY_CANADA = "ca"
+
+    const val KEY_COUNTRY = "country"
+    const val KEY_API_KEY = "apiKey"
 }
