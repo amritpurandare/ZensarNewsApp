@@ -12,11 +12,12 @@ import com.amrit.zensarnewsapp.network.Response
 import kotlinx.coroutines.launch
 
 class NewsViewModal : ViewModel() {
-
+    var showNewsDetailsFragment = MutableLiveData<Boolean>(false)
+    var articles = MutableLiveData<Articles>()
     private var newsData = MutableLiveData<Response<List<Articles>>>()
     val newsHeadLines: LiveData<Response<List<Articles>>>
         get() = newsData
-    
+
     fun getNewsHeadline(countryCode: String = NetworkAPIConstants.COUNTRY_USA) {
         newsData.postValue(Response.loading(null))
         viewModelScope.launch {
