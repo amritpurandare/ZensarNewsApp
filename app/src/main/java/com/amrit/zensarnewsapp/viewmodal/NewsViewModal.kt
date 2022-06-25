@@ -16,7 +16,7 @@ class NewsViewModal : ViewModel() {
     private var newsData = MutableLiveData<Response<List<Articles>>>()
     val newsHeadLines: LiveData<Response<List<Articles>>>
         get() = newsData
-    
+
     fun getNewsHeadline(countryCode: String = NetworkAPIConstants.COUNTRY_USA) {
         newsData.postValue(Response.loading(null))
         viewModelScope.launch {

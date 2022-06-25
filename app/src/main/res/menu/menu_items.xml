@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/country"
+        android:title="@string/us"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/usa"
+                android:title="@string/us" />
+            <item
+                android:id="@+id/canada"
+                android:title="@string/canada" />
+        </menu>
+    </item>
+</menu>
