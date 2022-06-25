@@ -1,5 +1,6 @@
 package com.amrit.zensarnewsapp.network
 
+import com.amrit.zensarnewsapp.constants.NetworkAPIConstants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -29,5 +30,9 @@ object APIClient {
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
+    }
+
+    fun getApiService(url: String = NetworkAPIConstants.BASE_URL): ApiService {
+        return getRetrofitClient(url).create(ApiService::class.java)
     }
 }
