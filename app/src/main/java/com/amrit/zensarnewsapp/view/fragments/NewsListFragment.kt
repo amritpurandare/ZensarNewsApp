@@ -95,7 +95,8 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
     }
 
     override fun onNewsArticleClick(article: Articles) {
-        Toast.makeText(requireActivity(), article.title, Toast.LENGTH_SHORT).show()
+        viewModel.showNewsDetailsFragment.postValue(true)
+        viewModel.articles.postValue(article)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

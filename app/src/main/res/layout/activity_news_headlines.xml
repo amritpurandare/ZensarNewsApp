@@ -10,6 +10,14 @@
         android:id="@+id/newsListFragment"
         android:name="com.amrit.zensarnewsapp.view.fragments.NewsListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <fragment
+        android:id="@+id/newsDetailsFragment"
+        android:name="com.amrit.zensarnewsapp.view.fragments.NewsDetailsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

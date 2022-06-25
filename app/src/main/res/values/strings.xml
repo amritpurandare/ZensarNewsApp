@@ -3,4 +3,8 @@
     <string name="canada">Canada</string>
     <string name="us">US</string>
     <string name="error_message">Error while loading data</string>
+    <string name="author">Author</string>
+    <string name="published">Published</string>
+    <string name="link">More Info</string>
+    <string name="unknown">UNKNOWN</string>
 </resources>
