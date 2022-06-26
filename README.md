@@ -4,12 +4,16 @@
 - On click of any news, users can see it's details.
 
 ## Language used 
-### Kotlin
+- Kotlin
 
-##Architecture pattern - MVVM
+## Architecture pattern - 
+- MVVM
 
-##Firebase library is used to track the screen views and news item clicks
+## Firebase library 
+- It is used to track the screen views and news item clicks
 
-##Added sample unit test cases.
+## mockk 
+- Added sample unit test cases using mockk
 
-$$Used retrofit for API calls along with kotlin coroutines to add suspended calls
+## Retrofit 
+- Used retrofit for API calls along with kotlin coroutines to add suspended calls
