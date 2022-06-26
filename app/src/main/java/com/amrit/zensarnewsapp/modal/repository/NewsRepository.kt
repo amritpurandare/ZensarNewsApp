@@ -6,14 +6,16 @@ import com.amrit.zensarnewsapp.modal.Articles
 import com.amrit.zensarnewsapp.network.APIClient
 
 class NewsRepository {
-    suspend fun fetchNewsData(countryCode: String = NetworkAPIConstants.COUNTRY_USA): ArrayList<Articles>? {
-        val apiService = APIClient.getApiService()
-        val headlines =
-            apiService.getHeadlines(countryCode, NetworkAPIConstants.API_KEY)
-        if (headlines.isSuccessful) {
-            headlines.body()?.run {
-                if (status == StringConstants.API_STATUS_OK) {
-                    return articles
+    suspend fun fetchNewsData(countryCode: String? = NetworkAPIConstants.COUNTRY_USA): ArrayList<Articles>? {
+        if (countryCode != null) {
+            val apiService = APIClient.getApiService()
+            val headlines =
+                apiService.getHeadlines(countryCode, NetworkAPIConstants.API_KEY)
+            if (headlines?.isSuccessful == true) {
+                headlines.body()?.run {
+                    if (status == StringConstants.API_STATUS_OK) {
+                        return articles
+                    }
                 }
             }
         }
