@@ -3,9 +3,11 @@ package com.amrit.zensarnewsapp.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-object ConnectivityManager {
-    fun isNetworkAvailable(context: Context): Boolean {
+class ConnectivityManager @Inject constructor(@ApplicationContext val context: Context) {
+    fun isNetworkAvailable(): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = connectivityManager.activeNetwork ?: return false
@@ -19,6 +21,5 @@ object ConnectivityManager {
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
             else -> false
         }
-
     }
 }
