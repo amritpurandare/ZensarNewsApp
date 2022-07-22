@@ -15,8 +15,7 @@ import com.amrit.zensarnewsapp.R
 import com.amrit.zensarnewsapp.constants.NetworkAPIConstants
 import com.amrit.zensarnewsapp.modal.Articles
 import com.amrit.zensarnewsapp.network.ApiStatus
-import com.amrit.zensarnewsapp.utils.ConnectivityManager
-import com.amrit.zensarnewsapp.utils.SharedPrefHelper
+import com.amrit.zensarnewsapp.network.Response
 import com.amrit.zensarnewsapp.view.NewsListAdapter
 import com.amrit.zensarnewsapp.view.OnNewsRowClick
 import com.amrit.zensarnewsapp.viewmodal.NewsViewModal
@@ -24,18 +23,19 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var country: String
     private lateinit var viewModel: NewsViewModal
-    private lateinit var sharedPrefHelper: SharedPrefHelper
+
     private lateinit var newsListAdapter: NewsListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        sharedPrefHelper = SharedPrefHelper(requireActivity())
         viewModel = ViewModelProvider(requireActivity())[NewsViewModal::class.java]
     }
 
@@ -51,20 +51,10 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
             it.let { response ->
                 when (response.status) {
                     ApiStatus.SUCCESS -> {
-                        progressBar.visibility = View.GONE
-                        response.data?.let { it1 ->
-                            newsListAdapter.setAdapterData(it1)
-                            recyclerView.adapter = newsListAdapter
-                        }
+                        handleApiSuccess(progressBar, response, recyclerView)
                     }
                     ApiStatus.ERROR -> {
-                        Log.d("NewsListFragment", response.message.toString())
-                        progressBar.visibility = View.GONE
-                        Toast.makeText(
-                            requireActivity(),
-                            getString(R.string.error_message),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        handleApiFailure(response, progressBar)
                     }
                     else -> {
                         progressBar.visibility = View.VISIBLE
@@ -73,6 +63,31 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
             }
         })
         return view
+    }
+
+    private fun handleApiFailure(
+        response: Response<List<Articles>>,
+        progressBar: ProgressBar
+    ) {
+        Log.d("NewsListFragment", response.message.toString())
+        progressBar.visibility = View.GONE
+        Toast.makeText(
+            requireActivity(),
+            getString(R.string.error_message),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun handleApiSuccess(
+        progressBar: ProgressBar,
+        response: Response<List<Articles>>,
+        recyclerView: RecyclerView
+    ) {
+        progressBar.visibility = View.GONE
+        response.data?.let { it1 ->
+            newsListAdapter.setAdapterData(it1)
+            recyclerView.adapter = newsListAdapter
+        }
     }
 
     private fun initViews(view: View): Pair<RecyclerView, ProgressBar> {
@@ -90,13 +105,7 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getData()
-    }
-
-    private fun getData() {
-        country = sharedPrefHelper.getUserCountry()
-        if (ConnectivityManager.isNetworkAvailable(requireActivity()) && this::viewModel.isInitialized)
-            viewModel.getNewsHeadline(country)
+        viewModel.getNewsHeadline()
     }
 
     override fun onNewsArticleClick(article: Articles) {
@@ -111,7 +120,7 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (sharedPrefHelper.getUserCountry() == NetworkAPIConstants.COUNTRY_USA) {
+        if (viewModel.getUserCountry() == NetworkAPIConstants.COUNTRY_USA) {
             menu.findItem(R.id.country).title = getString(R.string.us)
         } else {
             menu.findItem(R.id.country).title = getString(R.string.canada)
@@ -119,32 +128,14 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
         return super.onPrepareOptionsMenu(menu)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var isCountryChanged = false
-        when (item.itemId) {
-            R.id.usa -> {
-                if (country != NetworkAPIConstants.COUNTRY_USA) {
-                    isCountryChanged = true
-                    sharedPrefHelper.saveUserChoiceCountry(NetworkAPIConstants.COUNTRY_USA)
-                }
-            }
-            R.id.canada -> {
-                if (country != NetworkAPIConstants.COUNTRY_CANADA) {
-                    isCountryChanged = true
-                    sharedPrefHelper.saveUserChoiceCountry(NetworkAPIConstants.COUNTRY_CANADA)
-                }
-            }
-        }
-        if (isCountryChanged) {
-            getData()
-        }
+        viewModel.handleMenuItemClick(item.itemId)
         requireActivity().invalidateOptionsMenu()
         return super.onOptionsItemSelected(item)
     }
 
     override fun onRefresh() {
-        getData()
+        viewModel.getNewsHeadline()
         swipeRefreshLayout.isRefreshing = false
     }
 

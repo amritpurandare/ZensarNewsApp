@@ -7,7 +7,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.amrit.zensarnewsapp.R
 import com.amrit.zensarnewsapp.viewmodal.NewsViewModal
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NewsHeadlinesActivity : AppCompatActivity() {
     private lateinit var viewModel: NewsViewModal
     override fun onCreate(savedInstanceState: Bundle?) {
