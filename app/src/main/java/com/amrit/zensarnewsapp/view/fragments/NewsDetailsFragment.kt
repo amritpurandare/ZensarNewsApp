@@ -5,7 +5,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,29 +20,33 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 class NewsDetailsFragment : Fragment() {
+
+    private var _binding: FragmentNewsDetailsBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val inflate = DataBindingUtil.inflate<FragmentNewsDetailsBinding>(
+        _binding = DataBindingUtil.inflate<FragmentNewsDetailsBinding>(
             inflater,
             R.layout.fragment_news_details,
             container,
             false
         )
 
-        inflate.lifecycleOwner = requireActivity()
+        binding.lifecycleOwner = requireActivity()
         val viewModel = ViewModelProvider(requireActivity())[NewsViewModal::class.java]
-        inflate.viewModel = viewModel
+        binding.viewModel = viewModel
 
         viewModel.articles.observe(requireActivity(), Observer { article ->
             article?.let {
-                initViewWithData(article, inflate.root)
+                initViewWithData(article, binding.root)
             }
         })
         logNewsDetailsScreenViewEvent()
-        return inflate.root
+        return binding.root
     }
 
     private fun initViewWithData(
@@ -53,7 +56,7 @@ class NewsDetailsFragment : Fragment() {
         if (!TextUtils.isEmpty(article.urlToImage))
             Picasso.with(activity).load(article.urlToImage)
                 .placeholder(android.R.drawable.presence_offline)
-                .into(view.findViewById<ImageView>(R.id.articleImage))
+                .into(binding.articleImage)
     }
 
     private fun logNewsDetailsScreenViewEvent() {

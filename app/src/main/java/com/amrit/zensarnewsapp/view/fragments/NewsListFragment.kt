@@ -3,17 +3,15 @@ package com.amrit.zensarnewsapp.view.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amrit.zensarnewsapp.R
 import com.amrit.zensarnewsapp.constants.NetworkAPIConstants
+import com.amrit.zensarnewsapp.databinding.FragmentNewsListBinding
 import com.amrit.zensarnewsapp.modal.Articles
 import com.amrit.zensarnewsapp.network.ApiStatus
 import com.amrit.zensarnewsapp.network.Response
@@ -28,10 +26,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefreshListener {
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var viewModel: NewsViewModal
 
     private lateinit var newsListAdapter: NewsListAdapter
+
+    private var _newsListBinding: FragmentNewsListBinding? = null
+    private val newsListBinding get() = _newsListBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,33 +44,32 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_news_list, container, false)
-        val (recyclerView, progressBar) = initViews(view)
+        _newsListBinding = FragmentNewsListBinding.inflate(inflater, container, false)
+        initViews()
 
         viewModel.newsHeadLines.observe(viewLifecycleOwner) {
             it.let { response ->
                 when (response.status) {
                     ApiStatus.SUCCESS -> {
-                        handleApiSuccess(progressBar, response, recyclerView)
+                        handleApiSuccess(response)
                     }
                     ApiStatus.ERROR -> {
-                        handleApiFailure(response, progressBar)
+                        handleApiFailure(response)
                     }
                     else -> {
-                        progressBar.visibility = View.VISIBLE
+                        newsListBinding.progressBar.visibility = View.VISIBLE
                     }
                 }
             }
         }
-        return view
+        return newsListBinding.root
     }
 
     private fun handleApiFailure(
-        response: Response<List<Articles>>,
-        progressBar: ProgressBar
+        response: Response<List<Articles>>
     ) {
         Log.d("NewsListFragment", response.message.toString())
-        progressBar.visibility = View.GONE
+        newsListBinding.progressBar.visibility = View.GONE
         Toast.makeText(
             requireActivity(),
             getString(R.string.error_message),
@@ -79,28 +78,22 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
     }
 
     private fun handleApiSuccess(
-        progressBar: ProgressBar,
-        response: Response<List<Articles>>,
-        recyclerView: RecyclerView
+        response: Response<List<Articles>>
     ) {
-        progressBar.visibility = View.GONE
+        newsListBinding.progressBar.visibility = View.GONE
         response.data?.let { it1 ->
             newsListAdapter.setAdapterData(it1)
-            recyclerView.adapter = newsListAdapter
+            newsListBinding.headlinesRecyclerView.adapter = newsListAdapter
         }
     }
 
-    private fun initViews(view: View): Pair<RecyclerView, ProgressBar> {
+    private fun initViews() {
         newsListAdapter = NewsListAdapter(this@NewsListFragment)
         val layoutManager = LinearLayoutManager(requireActivity())
-        val recyclerView = view.findViewById<RecyclerView>(R.id.headlinesRecyclerView)
-        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeLayout)
-        swipeRefreshLayout.setOnRefreshListener(this@NewsListFragment)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.setHasFixedSize(true)
+        newsListBinding.swipeLayout.setOnRefreshListener(this@NewsListFragment)
+        newsListBinding.headlinesRecyclerView.layoutManager = layoutManager
+        newsListBinding.headlinesRecyclerView.setHasFixedSize(true)
         logNewsListScreenViewEvent()
-        return Pair(recyclerView, progressBar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -136,7 +129,7 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
 
     override fun onRefresh() {
         viewModel.getNewsHeadline()
-        swipeRefreshLayout.isRefreshing = false
+        newsListBinding.swipeLayout.isRefreshing = false
     }
 
     private fun logArticleClickEvent(newsTitle: String) {
