@@ -28,7 +28,6 @@ class NewsViewModal @Inject constructor() : ViewModel() {
     @Inject
     lateinit var connectivityManager: ConnectivityManager
 
-    var showNewsDetailsFragment = MutableLiveData<Boolean>(false)
     var articles = MutableLiveData<Articles>()
     private var newsData = MutableLiveData<Response<List<Articles>>>()
     val newsHeadLines: LiveData<Response<List<Articles>>>

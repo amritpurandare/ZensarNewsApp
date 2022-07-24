@@ -51,7 +51,7 @@ class NewsDetailsFragment : Fragment() {
         view: View
     ) {
         if (!TextUtils.isEmpty(article.urlToImage))
-            Picasso.with(requireActivity()).load(article.urlToImage)
+            Picasso.with(activity).load(article.urlToImage)
                 .placeholder(android.R.drawable.presence_offline)
                 .into(view.findViewById<ImageView>(R.id.articleImage))
     }

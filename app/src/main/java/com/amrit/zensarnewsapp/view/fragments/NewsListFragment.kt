@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -28,7 +29,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var country: String
     private lateinit var viewModel: NewsViewModal
 
     private lateinit var newsListAdapter: NewsListAdapter
@@ -47,7 +47,7 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
         val view = inflater.inflate(R.layout.fragment_news_list, container, false)
         val (recyclerView, progressBar) = initViews(view)
 
-        viewModel.newsHeadLines.observe(viewLifecycleOwner, Observer {
+        viewModel.newsHeadLines.observe(viewLifecycleOwner) {
             it.let { response ->
                 when (response.status) {
                     ApiStatus.SUCCESS -> {
@@ -61,7 +61,7 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
                     }
                 }
             }
-        })
+        }
         return view
     }
 
@@ -109,7 +109,7 @@ class NewsListFragment : Fragment(), OnNewsRowClick, SwipeRefreshLayout.OnRefres
     }
 
     override fun onNewsArticleClick(article: Articles) {
-        viewModel.showNewsDetailsFragment.postValue(true)
+        findNavController().navigate(R.id.action_newsListFragment2_to_newsDetailsFragment3)
         viewModel.articles.postValue(article)
         logArticleClickEvent(article.title ?: getString(R.string.unknown))
     }
