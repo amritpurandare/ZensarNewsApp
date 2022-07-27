@@ -48,6 +48,7 @@ class NewsViewModal @Inject constructor() : ViewModel() {
         newsData.postValue(Response.loading(null))
         viewModelScope.launch {
             val data = newsRepository.fetchNewsData(getUserCountry())
+            newsRepository.searchTrains()
             if (data?.isNotEmpty() == true)
                 newsData.postValue(Response.success(data))
             else

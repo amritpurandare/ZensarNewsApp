@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -43,6 +44,7 @@ class RetrofitModule {
 
     @Singleton
     @Provides
+    @Named("News")
     fun providesRetrofit(
         gsonConverterFactory: GsonConverterFactory,
         okHttpClient: OkHttpClient
@@ -56,7 +58,7 @@ class RetrofitModule {
 
     @Singleton
     @Provides
-    fun providesNewsApiService(retrofit: Retrofit): ApiService {
+    fun providesNewsApiService(@Named("News") retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
 }
