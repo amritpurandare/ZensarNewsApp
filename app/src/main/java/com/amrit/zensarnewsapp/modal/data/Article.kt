@@ -1,8 +1,8 @@
-package com.amrit.zensarnewsapp.modal
+package com.amrit.zensarnewsapp.modal.data
 
 import com.google.gson.annotations.SerializedName
 
-data class Articles(
+data class Article(
     @SerializedName("source") var source: Source? = null,
     @SerializedName("author") var author: String? = null,
     @SerializedName("title") var title: String? = null,

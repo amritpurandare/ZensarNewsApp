@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.amrit.zensarnewsapp.R
 import com.amrit.zensarnewsapp.databinding.FragmentNewsDetailsBinding
-import com.amrit.zensarnewsapp.modal.Articles
+import com.amrit.zensarnewsapp.modal.data.Article
 import com.amrit.zensarnewsapp.viewmodal.NewsViewModal
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -40,7 +40,7 @@ class NewsDetailsFragment : Fragment() {
         val viewModel = ViewModelProvider(requireActivity())[NewsViewModal::class.java]
         binding.viewModel = viewModel
 
-        viewModel.articles.observe(requireActivity(), Observer { article ->
+        viewModel.article.observe(requireActivity(), Observer { article ->
             article?.let {
                 initViewWithData(article, binding.root)
             }
@@ -50,7 +50,7 @@ class NewsDetailsFragment : Fragment() {
     }
 
     private fun initViewWithData(
-        article: Articles,
+        article: Article,
         view: View
     ) {
         if (!TextUtils.isEmpty(article.urlToImage))

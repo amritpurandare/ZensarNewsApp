@@ -1,7 +1,6 @@
-package com.amrit.zensarnewsapp
+package com.amrit.zensarnewsapp.network
 
 import com.amrit.zensarnewsapp.constants.NetworkAPIConstants
-import com.amrit.zensarnewsapp.network.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
