@@ -1,4 +1,4 @@
-package com.amrit.zensarnewsapp
+package com.amrit.zensarnewsapp.utils
 
 import android.content.Context
 import android.content.SharedPreferences

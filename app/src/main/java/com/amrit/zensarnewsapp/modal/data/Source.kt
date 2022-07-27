@@ -1,4 +1,4 @@
-package com.amrit.zensarnewsapp.modal
+package com.amrit.zensarnewsapp.modal.data
 
 import com.google.gson.annotations.SerializedName
 

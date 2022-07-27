@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amrit.zensarnewsapp.databinding.ListItemHeadlineBinding
-import com.amrit.zensarnewsapp.modal.Articles
+import com.amrit.zensarnewsapp.modal.data.Article
 import com.squareup.picasso.Picasso
 
 class NewsListAdapter(private val itemClick: OnNewsRowClick) :
@@ -15,7 +15,7 @@ class NewsListAdapter(private val itemClick: OnNewsRowClick) :
     private var _binding: ListItemHeadlineBinding?= null
     private val binding get() = _binding!!
 
-    var newsList = ArrayList<Articles>()
+    var newsList = ArrayList<Article>()
 
     class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -41,12 +41,12 @@ class NewsListAdapter(private val itemClick: OnNewsRowClick) :
         return newsList.size
     }
 
-    fun setAdapterData(headlines: List<Articles>) {
-        this.newsList = headlines as ArrayList<Articles>
+    fun setAdapterData(headlines: List<Article>) {
+        this.newsList = headlines as ArrayList<Article>
         notifyDataSetChanged()
     }
 }
 
 interface OnNewsRowClick {
-    fun onNewsArticleClick(article: Articles)
+    fun onNewsArticleClick(article: Article)
 }

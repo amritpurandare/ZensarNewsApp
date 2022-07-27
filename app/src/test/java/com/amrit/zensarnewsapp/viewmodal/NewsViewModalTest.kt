@@ -42,7 +42,7 @@ class NewsViewModalTest {
         newsViewModal.newsHeadLines.observeForever(observer)
         every { observer.onChanged(any()) } returns Unit
         coEvery { newsRepository.fetchNewsData() } returns ArrayList<Articles>()
-        newsViewModal.getNewsHeadline()
+        newsViewModal.callNewsApi()
         assertNotNull(newsViewModal.newsHeadLines.value)
     }
 }
